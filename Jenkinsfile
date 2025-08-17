@@ -3,35 +3,29 @@ pipeline {
 
     stages {
         stage('Build') {
-            stages {
-                stage('Compile') {
-                    steps {
-                        echo 'Compiling...'
-                        sleep 10
-                    }
-                }
-                stage('Package') {
-                    steps {
-                        echo 'Packaging...'
-                        sleep 5
-                    }
-                }
+            steps {
+                echo 'Building...'
+                sleep 20
             }
         }
-
         stage('Test') {
             steps {
-                echo 'Running Unit Tests...'
+                echo 'Running tests...'
                 sleep 10
-                echo 'Running Integration Tests...'
-                sleep 5
             }
         }
-
         stage('Deploy') {
             steps {
                 echo 'Deploying...'
                 sleep 5
+                 // Fail the build
+                error('Tests failed!')
+            }
+        }
+        stage('Automation Test') {
+            steps {
+                echo 'Running tests...'
+                sleep 10
             }
         }
     }
