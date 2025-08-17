@@ -5,27 +5,35 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                sleep 20
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Running tests...'
                 sleep 10
             }
         }
+
+        stage('Test') {
+            steps {
+                script {
+                    echo 'Running tests...'
+                    sleep 10          
+                }
+            }
+        }
+
         stage('Deploy') {
             steps {
                 echo 'Deploying...'
                 sleep 5
-                 // Fail the build
-                error('Tests failed!')
+                // Mark this stage as UNSTABLE and stop further stages
+                catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
+                    error('Tests failed. Marking build as UNSTABLE and stopping pipeline.')
+                }
             }
         }
         stage('Automation Test') {
             steps {
-                echo 'Running tests...'
-                sleep 10
+                script {
+                    echo 'Running tests...'
+                    sleep 10
+                }
             }
         }
     }
